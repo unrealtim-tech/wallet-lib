@@ -1,0 +1,27 @@
+# Esplora HTTP API (Blockstream electrs) indexing a Polar regtest bitcoind.
+# Usage:  cd esplora && docker compose up --build
+# Then:   cargo run --example ratatui -- --network regtest --esplora http://localhost:3002
+#
+# Set these from Polar -> your bitcoind node -> Connect tab (defaults shown).
+services:
+  esplora:
+    build: .
+    ports:
+      - "3002:3002"   # Esplora REST API (what the TUI talks to)
+    volumes:
+      - esplora-db:/data
+    command:
+      - --network=regtest
+      - --daemon-rpc-addr=host.docker.internal:${POLAR_RPC_PORT:-18443}
+      - --cookie=${POLAR_RPC_USER:-polaruser}:${POLAR_RPC_PASS:-polarpass}
+      - --jsonrpc-import          # read blocks over RPC; no access to bitcoind's data dir needed
+      - --db-dir=/data
+      - --http-addr=0.0.0.0:3002
+      - --electrum-rpc-addr=0.0.0.0:60401
+      - -vv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+volumes:
+  esplora-db:

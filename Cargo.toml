@@ -1,0 +1,31 @@
+[package]
+name = "wallet-lib"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "A thin, backend-agnostic Bitcoin wallet API built on Bitcoin Dev Kit (BDK)."
+readme = "README.md"
+keywords = ["bitcoin", "wallet", "bdk", "psbt", "descriptor"]
+categories = ["cryptography::cryptocurrencies"]
+
+[dependencies]
+bdk_wallet = { version = "3.2.0", features = ["keys-bip39"] }
+bitcoin = "0.32.102"
+thiserror = "2.0.21"
+
+[dev-dependencies]
+arboard = { version = "3.6.1", default-features = false }
+bdk_bitcoind_rpc = "0.22.0"
+bdk_esplora = { version = "0.22.2", default-features = false, features = ["blocking"] }
+crossterm = "0.29.0"
+dotenvy = "0.15.7"
+qrcode = { version = "0.14.1", default-features = false }
+ratatui = "0.30.2"
+
+[[example]]
+name = "basic"
+path = "examples/basic.rs"
+
+[[example]]
+name = "ratatui"
+path = "examples/ratatui/main.rs"
